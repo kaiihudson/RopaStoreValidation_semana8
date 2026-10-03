@@ -1,11 +1,12 @@
 package com.duoc.ropastorevalidation.cliente.service;
 
-import com.duoc.ropastorevalidation.cliente.model.Cliente;
-import com.duoc.ropastorevalidation.cliente.repository.ClienteRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.duoc.ropastorevalidation.cliente.model.Cliente;
+import com.duoc.ropastorevalidation.cliente.repository.ClienteRepository;
 
 @Service
 public class ClienteService {
@@ -20,11 +21,11 @@ public class ClienteService {
     }
 
     public Optional<Cliente> getByRut(String rut) {
-        return Optional.of(clienteRepository.findByRut(rut));
+        return clienteRepository.findByRut(rut);
     }
 
     public Optional<Cliente> getById(Long id) {
-        return Optional.of(clienteRepository.findById(id)).orElse(null);
+        return clienteRepository.findById(id);
     }
 
     public Cliente create(Cliente cliente) {
@@ -36,7 +37,8 @@ public class ClienteService {
         if (oldCliente.isPresent()) {
             oldCliente.get().setRut(cliente.getRut());
             oldCliente.get().setNombre(cliente.getNombre());
-            oldCliente.get().setDireccion(String.valueOf(cliente.getDireccion()));
+            oldCliente.get().setCorreo(cliente.getCorreo());
+            oldCliente.get().setDireccion(cliente.getDireccion());
             oldCliente.get().setTelefono(cliente.getTelefono());
             return clienteRepository.save(oldCliente.get());
         } else {

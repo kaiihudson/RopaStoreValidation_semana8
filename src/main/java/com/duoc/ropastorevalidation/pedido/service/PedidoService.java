@@ -1,13 +1,14 @@
 package com.duoc.ropastorevalidation.pedido.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.duoc.ropastorevalidation.cliente.model.Cliente;
 import com.duoc.ropastorevalidation.pedido.model.Estado;
 import com.duoc.ropastorevalidation.pedido.model.Pedido;
 import com.duoc.ropastorevalidation.pedido.repository.PedidoRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -22,10 +23,10 @@ public class PedidoService {
     }
 
     public Optional<Pedido> getById(Long id) {
-        return Optional.of(pedidoRepository.findById(id)).orElse(null);
+        return pedidoRepository.findById(id);
     }
-    public Optional<List<Pedido>> getAllByClient(Cliente cliente) {
-        return Optional.of(pedidoRepository.getAllByCliente(cliente));
+    public List<Pedido> getAllByClient(Cliente cliente) {
+        return pedidoRepository.getAllByCliente(cliente);
     }
 
     public Pedido create(Pedido pedido) {
@@ -33,11 +34,14 @@ public class PedidoService {
     }
 
     public Pedido update(Long id, Pedido pedido) {
-        Optional<Pedido> oldPedido = getById(id);
+    Optional<Pedido> oldPedido = getById(id);
         if (oldPedido.isPresent()) {
             oldPedido.get().setEstado(pedido.getEstado());
             oldPedido.get().setFechaPedido(pedido.getFechaPedido());
             oldPedido.get().setTotal(pedido.getTotal());
+            if (pedido.getCliente() != null) {
+                oldPedido.get().setCliente(pedido.getCliente());
+            }
             return pedidoRepository.save(oldPedido.get());
         } else {
             return null;
@@ -54,8 +58,8 @@ public class PedidoService {
     }
 
     public Long deleteById(Long id) {
-        Optional<Pedido> oldCliente = getById(id);
-        if (oldCliente.isPresent()) {
+        Optional<Pedido> oldPedido = getById(id);
+        if (oldPedido.isPresent()) {
             pedidoRepository.deleteById(id);
             return id;
         } else {

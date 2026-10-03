@@ -1,11 +1,12 @@
 package com.duoc.ropastorevalidation.producto.service;
 
-import com.duoc.ropastorevalidation.producto.model.Producto;
-import com.duoc.ropastorevalidation.producto.repository.ProductoRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.duoc.ropastorevalidation.producto.model.Producto;
+import com.duoc.ropastorevalidation.producto.repository.ProductoRepository;
 
 @Service
 public class ProductoService {
@@ -20,7 +21,11 @@ public class ProductoService {
     }
 
     public Optional<Producto> findById(Long id) {
-        return  Optional.of(productoRepository.findById(id)).orElse(null);
+        return  productoRepository.findById(id);
+    }
+
+    public List<Producto> findBySucursalId(Long sucursalId) {
+        return productoRepository.findBySucursalId(sucursalId);
     }
 
     public Producto create(Producto producto) {
@@ -33,15 +38,20 @@ public class ProductoService {
             oldProduct.get().setNombre(producto.getNombre());
             oldProduct.get().setPrecio(producto.getPrecio());
             oldProduct.get().setCategoria(producto.getCategoria());
+            oldProduct.get().setStock(producto.getStock());
+            if(producto.getSucursal() != null) {
+                oldProduct.get().setSucursal(producto.getSucursal());
+            }
             return  productoRepository.save(oldProduct.get());
-        } else return  null;
+        } else {
+            return  null;
+        }
     }
     public Long deleteById(Long id) {
         Optional<Producto> oldProduct = findById(id);
         if(oldProduct.isPresent()){
-            Long deletedId = oldProduct.get().getId();
             productoRepository.deleteById(id);
-            return deletedId;
+            return id;
         } else {
             return null;
         }

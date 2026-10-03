@@ -1,11 +1,12 @@
 package com.duoc.ropastorevalidation.sucursal.service;
 
-import com.duoc.ropastorevalidation.sucursal.model.Sucursal;
-import com.duoc.ropastorevalidation.sucursal.repository.SucursalRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.duoc.ropastorevalidation.sucursal.model.Sucursal;
+import com.duoc.ropastorevalidation.sucursal.repository.SucursalRepository;
 
 @Service
 public class SucursalService {
@@ -19,13 +20,16 @@ public class SucursalService {
     }
 
     public Optional<Sucursal> findById(Long id) {
-        return Optional.of(sucursalRepository.findById(id)).orElse(null);
+        return sucursalRepository.findById(id);
     }
 
     public Sucursal update(Long id, Sucursal sucursal) {
-        Optional<Sucursal> optionalSucursal = findById(id);
-        if (optionalSucursal.isPresent()) {
-            return sucursalRepository.save(sucursal);
+        Optional<Sucursal> oldSucursal = findById(id);
+        if (oldSucursal.isPresent()) {
+            oldSucursal.get().setNombre(sucursal.getNombre());
+            oldSucursal.get().setDireccion(sucursal.getDireccion());
+            oldSucursal.get().setCiudad(sucursal.getCiudad());
+            return sucursalRepository.save(oldSucursal.get());
         } else {
             return null;
         }

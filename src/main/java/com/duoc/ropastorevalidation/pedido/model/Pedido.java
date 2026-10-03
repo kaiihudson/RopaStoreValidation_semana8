@@ -1,9 +1,17 @@
 package com.duoc.ropastorevalidation.pedido.model;
 
-import com.duoc.ropastorevalidation.cliente.model.Cliente;
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
+
+import com.duoc.ropastorevalidation.cliente.model.Cliente;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Pedido {
@@ -15,6 +23,7 @@ public class Pedido {
     private Cliente cliente;
     private LocalDate fechaPedido;
     private int total;
+    @Enumerated(EnumType.STRING)
     private Estado estado = Estado.CREADO;
 
     public Pedido() {

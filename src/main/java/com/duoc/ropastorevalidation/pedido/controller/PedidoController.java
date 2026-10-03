@@ -1,18 +1,27 @@
 package com.duoc.ropastorevalidation.pedido.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.duoc.ropastorevalidation.cliente.model.Cliente;
 import com.duoc.ropastorevalidation.cliente.service.ClienteService;
 import com.duoc.ropastorevalidation.pedido.model.Estado;
 import com.duoc.ropastorevalidation.pedido.model.Pedido;
 import com.duoc.ropastorevalidation.pedido.service.PedidoService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("api/pedidos")
+@RequestMapping("/api/pedidos")
 public class PedidoController {
 
     private final PedidoService pedidoService;
@@ -32,8 +41,7 @@ public class PedidoController {
     public ResponseEntity<List<Pedido>> findByClienteId(@PathVariable Long id){
         Optional<Cliente> realCliente = clienteService.getById(id);
         if(realCliente.isPresent()){
-            Optional<List<Pedido>> pedidosCliente = pedidoService.getAllByClient(realCliente.get());
-            return pedidosCliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+            return ResponseEntity.ok(pedidoService.getAllByClient(realCliente.get()));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -45,7 +53,7 @@ public class PedidoController {
         return ResponseEntity.ok(pedidoService.create(pedido));
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Pedido> update(@PathVariable Long id, @RequestBody Pedido pedido){
         Pedido updated =  pedidoService.update(id, pedido);
         if (updated == null) {
@@ -55,7 +63,7 @@ public class PedidoController {
         }
     }
 
-    @PostMapping("/status/{id}")
+    @PatchMapping("/{id}/status")
     public ResponseEntity<Pedido> updateStatus(@PathVariable Long id, @RequestBody Estado estado){
         Pedido updated = pedidoService.updateStatusById(id, estado);
         if (updated == null) {

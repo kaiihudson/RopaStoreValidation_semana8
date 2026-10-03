@@ -1,8 +1,0 @@
-FROM mysql:latest
-
-ENV MYSQL_ROOT_PASSWORD=securePassword
-ENV MYSQL_USER=ropa_store
-ENV MYSQL_PASSWORD=store_ropa
-ENV MYSQL_DATABASE=ropastore
-
-EXPOSE 3306

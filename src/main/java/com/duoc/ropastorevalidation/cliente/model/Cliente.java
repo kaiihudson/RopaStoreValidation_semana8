@@ -1,9 +1,16 @@
 package com.duoc.ropastorevalidation.cliente.model;
 
-import com.duoc.ropastorevalidation.pedido.model.Pedido;
-import jakarta.persistence.*;
-
 import java.util.List;
+
+import com.duoc.ropastorevalidation.pedido.model.Pedido;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Cliente {
@@ -12,6 +19,7 @@ public class Cliente {
     private Long id;
     private String rut;
     private String nombre;
+    private String correo;
     private int telefono;
     private String direccion;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -20,9 +28,10 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String rut, String nombre, int telefono, String direccion) {
+    public Cliente(String rut, String nombre, String correo, int telefono, String direccion) {
         this.rut = rut;
         this.nombre = nombre;
+        this.correo = correo;
         this.telefono = telefono;
         this.direccion = direccion;
     }
@@ -49,6 +58,14 @@ public class Cliente {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public int getTelefono() {
